@@ -1,14 +1,14 @@
 package com.am.dao.update;
 
+import org.apache.commons.beanutils.PropertyUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.beanutils.PropertyUtils;
-import org.slf4j.Logger;
-import org.springframework.util.Assert;
 /**
  * @Project: aimusic
  * @Package Name: com.am.dao.update
@@ -21,7 +21,7 @@ public class TmBeanUtil {
     protected static Logger logger = LoggerFactory.getLogger(TmBeanUtil.class);
 
     /**
-     * »ñµÃÍ¬Ê±ÓĞgetºÍsetµÄfieldºÍvalue¡£
+     * è·å¾—åŒæ—¶æœ‰getå’Œsetçš„fieldå’Œvalueã€‚
      *
      * @param bean
      * @return
@@ -36,7 +36,7 @@ public class TmBeanUtil {
                 try {
                     des.put(name, PropertyUtils.getProperty(bean, name));
                 } catch (Exception e) {
-                    throw new RuntimeException("ÊôĞÔ²»´æÔÚ£º" + name);
+                    throw new RuntimeException("å±æ€§ä¸å­˜åœ¨ï¼š" + name);
                 }
             }
         }
@@ -47,7 +47,7 @@ public class TmBeanUtil {
         try {
             PropertyUtils.setSimpleProperty(bean, name, value);
         } catch (Exception e) {
-            throw new RuntimeException("ÊôĞÔ²»´æÔÚ£º" + name);
+            throw new RuntimeException("å±æ€§ä¸å­˜åœ¨ï¼š" + name);
         }
     }
 
@@ -55,12 +55,12 @@ public class TmBeanUtil {
         try {
             return PropertyUtils.getSimpleProperty(bean, name);
         } catch (Exception e) {
-            throw new RuntimeException("ÊôĞÔ²»´æÔÚ£º" + name);
+            throw new RuntimeException("å±æ€§ä¸å­˜åœ¨ï¼š" + name);
         }
     }
 
     /**
-     * Ö±½Ó¶ÁÈ¡¶ÔÏóÊôĞÔÖµ,ÎŞÊÓprivate/protectedĞŞÊÎ·û,²»¾­¹ıgetterº¯Êı.
+     * ç›´æ¥è¯»å–å¯¹è±¡å±æ€§å€¼,æ— è§†private/protectedä¿®é¥°ç¬¦,ä¸ç»è¿‡getterå‡½æ•°.
      */
     public static Object getFieldValue(Object object, String fieldName) throws NoSuchFieldException {
         Field field = getDeclaredField(object, fieldName);
@@ -72,13 +72,13 @@ public class TmBeanUtil {
         try {
             result = field.get(object);
         } catch (IllegalAccessException e) {
-            logger.error("²»¿ÉÄÜÅ×³öµÄÒì³£{}", e.getMessage());
+            logger.error("ä¸å¯èƒ½æŠ›å‡ºçš„å¼‚å¸¸{}", e.getMessage());
         }
         return result;
     }
 
     /**
-     * Ö±½ÓÉèÖÃ¶ÔÏóÊôĞÔÖµ,ÎŞÊÓprivate/protectedĞŞÊÎ·û,²»¾­¹ısetterº¯Êı.
+     * ç›´æ¥è®¾ç½®å¯¹è±¡å±æ€§å€¼,æ— è§†private/protectedä¿®é¥°ç¬¦,ä¸ç»è¿‡setterå‡½æ•°.
      */
     public static void setFieldValue(Object object, String fieldName, Object value) throws NoSuchFieldException {
         Field field = getDeclaredField(object, fieldName);
@@ -88,12 +88,12 @@ public class TmBeanUtil {
         try {
             field.set(object, value);
         } catch (IllegalAccessException e) {
-            logger.error("²»¿ÉÄÜÅ×³öµÄÒì³£:{}", e.getMessage());
+            logger.error("ä¸å¯èƒ½æŠ›å‡ºçš„å¼‚å¸¸:{}", e.getMessage());
         }
     }
 
     /**
-     * Ñ­»·ÏòÉÏ×ªĞÍ,»ñÈ¡¶ÔÏóµÄDeclaredField.
+     * å¾ªç¯å‘ä¸Šè½¬å‹,è·å–å¯¹è±¡çš„DeclaredField.
      */
     public static Field getDeclaredField(Object object, String fieldName) throws NoSuchFieldException {
         Assert.notNull(object);
@@ -101,7 +101,7 @@ public class TmBeanUtil {
     }
 
     /**
-     * Ñ­»·ÏòÉÏ×ªĞÍ,»ñÈ¡ÀàµÄDeclaredField.
+     * å¾ªç¯å‘ä¸Šè½¬å‹,è·å–ç±»çš„DeclaredField.
      */
     public static Field getDeclaredField(Class clazz, String fieldName) throws NoSuchFieldException {
         Assert.notNull(clazz);
@@ -110,14 +110,14 @@ public class TmBeanUtil {
             try {
                 return superClass.getDeclaredField(fieldName);
             } catch (NoSuchFieldException e) {
-                // Field²»ÔÚµ±Ç°Àà¶¨Òå,¼ÌĞøÏòÉÏ×ªĞÍ
+                // Fieldä¸åœ¨å½“å‰ç±»å®šä¹‰,ç»§ç»­å‘ä¸Šè½¬å‹
             }
         }
         throw new NoSuchFieldException("No such field: " + clazz.getName() + '.' + fieldName);
     }
 
     /**
-     *ÉèÄ¬ÈÏÖµ
+     *è®¾é»˜è®¤å€¼
      */
     public static Object setDefaultValue(Object bean, Object template) {
         Map<String, Object> defaultMap = describe(template);
